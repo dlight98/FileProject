@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
   }
   close(fs);
 */
-} else if (strcmp(argv[1], "write") == 0) { //WRITE fs file
+  } else if (strcmp(argv[1], "write") == 0) { //WRITE fs file
     printf("manipulate fs file with writes.\n");
 
     // Open TFS and establish curr_proc so we can do application code
@@ -175,6 +175,7 @@ int main(int argc, char *argv[]) {
     printf("fd1: %d\n", fd1);
     s = tfs_write(fd1, "COOPER123", 9);
     printf("tfs_write bytes: %d\n", s);
+
     int fd2 = tfs_open("HELLOWORLD", TO_CREATE | TO_RDWR, 0);
     printf("fd2: %d\n", fd2);
     s = tfs_write(fd2, "HELLO TO EVERYONE IN the world! Happy New Years!", 48);
@@ -186,11 +187,6 @@ int main(int argc, char *argv[]) {
     printf("fd3: %d\n", fd3);
     s = tfs_write(fd3, "Writing data to another file. 123456789abcdefgh!", 48);
     printf("tfs_write bytes: %d\n", s);
-
-    /*int fd3 = tfs_open("NICK", TO_CREATE | TO_RDWR, 0);
-    printf("fd3: %d\n", fd3);
-    s = tfs_write(fd3, "Nick's part 2", 13);
-    printf("tfs_write bytes: %d\n", s);*/
 
     int fd4 = tfs_open("MyFile", TO_CREATE | TO_RDWR, 0);
     printf("fd4: %d\n", fd4);
@@ -228,7 +224,7 @@ int main(int argc, char *argv[]) {
     // Open TFS and establish curr_proc so we can do application code
     // curr_proc is a macro defined in proc.h
     curr_proc = malloc(sizeof(struct proc));
-    strcpy(curr_proc->name, "Gusty");
+    strcpy(curr_proc->name, "Nick");
     openfs(FSNAME);
     printf("fs : %d\n", fs);
     memset(b, 0, BSIZE);
@@ -244,9 +240,15 @@ int main(int argc, char *argv[]) {
     s = tfs_read(fd3, buffer, 19);
     printf("tfs_read bytes: fd: %d, bytes read: %d value read: %s\n", fd3, s, buffer);
 
-    int fd4 = tfs_open("MyFile", TO_RDONLY, 0);
+    /*int fd4 = tfs_open("MyFile", TO_RDONLY, 0);
     printf("fd4: %d\n", fd4);
     s = tfs_read(fd4, buffer, 47);
+    printf("tfs_read bytes: fd: %d, bytes read: %d value read: %s\n", fd4, s, buffer);*/
+
+    //strcpy(buffer, "sometext");
+    int fd4 = tfs_open("NICK", TO_RDONLY, 0);
+    printf("fd4: %d\n", fd4);
+    s = tfs_read(fd4, buffer, 13);
     printf("tfs_read bytes: fd: %d, bytes read: %d value read: %s\n", fd4, s, buffer);
 
 

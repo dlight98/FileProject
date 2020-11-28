@@ -54,7 +54,7 @@ void fileclose(struct file *f) {
   ff = *f;
   f->ref = 0;
   f->type = FD_NONE;
-  
+
   if(ff.type == FD_INODE){
     iput(ff.ip);
   }
@@ -122,4 +122,3 @@ int filewrite(struct file *f, char *addr, int n) {
   panic("filewrite");
   return -1;
 }
-
