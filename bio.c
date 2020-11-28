@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   int s;
-  if (strcmp(argv[1], "create") == 0) { // create fs file
+  if (strcmp(argv[1], "create") == 0) { // CREATE fs file
     printf("create fs file.\n");
     createfs(FSNAME, NBLOCKS, NBLOCKS-8, 32);
     openfs(FSNAME);
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
   }
   close(fs);
 */
-  } else if (strcmp(argv[1], "write") == 0) {
+} else if (strcmp(argv[1], "write") == 0) { //WRITE fs file
     printf("manipulate fs file with writes.\n");
 
     // Open TFS and establish curr_proc so we can do application code
@@ -181,10 +181,16 @@ int main(int argc, char *argv[]) {
     printf("tfs_write bytes: %d\n", s);
     s = tfs_write(fd2, "Writing data to another file. 123456789abcdefgh!", 48);
     printf("tfs_write bytes: %d\n", s);
-    int fd3 = tfs_open("Another", TO_CREATE | TO_RDWR, 0);
+
+    int fd3 = tfs_open("Another", TO_CREATE | TO_RDWR, 0);  //ORIGINAL
     printf("fd3: %d\n", fd3);
     s = tfs_write(fd3, "Writing data to another file. 123456789abcdefgh!", 48);
     printf("tfs_write bytes: %d\n", s);
+
+    /*int fd3 = tfs_open("NICK", TO_CREATE | TO_RDWR, 0);
+    printf("fd3: %d\n", fd3);
+    s = tfs_write(fd3, "Nick's part 2", 13);
+    printf("tfs_write bytes: %d\n", s);*/
 
     int fd4 = tfs_open("MyFile", TO_CREATE | TO_RDWR, 0);
     printf("fd4: %d\n", fd4);
@@ -193,7 +199,7 @@ int main(int argc, char *argv[]) {
 
     int fd5 = tfs_open("NICK", TO_CREATE | TO_RDWR, 0);
     printf("fd5: %d\n", fd5);
-    s = tfs_write(fd5, "Nick's part 2", 48);
+    s = tfs_write(fd5, "Nick's part 2", 13);
     printf("tfs_write bytes: %d\n", s);
 
     tfs_close(fd1);
@@ -217,7 +223,7 @@ int main(int argc, char *argv[]) {
     memcpy(&ui, &seconds, 4);
     printf("sizeof(time_t): %lu, time: %lx, %x\n",sizeof(time_t), seconds, ui);
     //*/
-  } else if (strcmp(argv[1], "read") == 0) {
+  } else if (strcmp(argv[1], "read") == 0) {  //READ fs file
     printf("manipulate fs file with reads.\n");
     // Open TFS and establish curr_proc so we can do application code
     // curr_proc is a macro defined in proc.h
