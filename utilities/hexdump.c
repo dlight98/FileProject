@@ -1,3 +1,7 @@
+/*
+  I added an -e flag which prints the number of the last block
+*/
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,10 +32,17 @@ void panic(char *m){
   exit(-1);
 }
 
+/*
+ * $ hexdump -e file
+ * hexdump will print number of the last block with data on it
+ */
+void end_block(){
+
+}
 
 int get_opts(int count, char *args[]) {
   int opt, len, i, good = 1;
-  while (good && (opt = getopt(count, args, "s:l:")) != -1) {
+  while (good && (opt = getopt(count, args, "s:l:e:")) != -1) {
     int len, i;
     switch (opt) {
       case 's':
@@ -56,11 +67,19 @@ int get_opts(int count, char *args[]) {
         if (good)
             blocks = atoi(optarg);
         break;
+      case 'e': //my addition
+        len = strlen(optarg);
+        good = 1; //sets good value to 1
+        start_block = -1; //this allows us to compare in main()
+        break;
       case ':':
         fprintf(stderr, "option missing value\n");
         break;
       case '?':
-        if (optopt == 'l')
+        if (optopt == 'e'){
+          fprintf(stderr, "DEBUG - case? - using e flag\n"); //DEBUG
+          break;}
+        else if (optopt == 'l')
           fprintf(stderr, "Option -%c requires an argument.\n", optopt);
         else if (optopt == 's')
           fprintf(stderr, "Option -%c requires an argument.\n", optopt);
@@ -72,7 +91,7 @@ int get_opts(int count, char *args[]) {
         break;
     }
   }
-  if(good && optind > count-1) {
+  if(good && optind > count-1 && start_block != -1) {
     fprintf(stderr, "Invalid number of arguments. %d\n", optind);
     good = 0;
   }
@@ -116,11 +135,15 @@ int main(int argc, char *argv[]) {
 
   int status = get_opts(argc, argv);
   if (!status)
-  exit(-1);
-
+    exit(-1);
   openfs(filename);
-
   unsigned char buf[BSIZE];
+
+  if(start_block < 0) {  //to use -e
+    printf("DEBUG - main - using -e\n");  //DEBUG
+    return 0;
+  }
+
   for (int i = start_block; i < start_block + blocks; i++) {
     if (bread(i, buf) > 0) {
       printf("block: %05d: \n", i);
@@ -141,8 +164,8 @@ int main(int argc, char *argv[]) {
         printf("\n");
       }
     }
-    else
-      break; // reached EOF
+    else {
+      break; } // reached EOF
   }
   closefs();
 }

@@ -6,7 +6,7 @@
  *   + Directories: inode with special contents (list of other inodes!)
  *   + Names: paths like /usr/rtm/xv6/fs.c for convenient naming.
  *
- * This file contains the low-level file system manipulation routines.  
+ * This file contains the low-level file system manipulation routines.
  * The (higher-level) system call implementations are in tfsfile.c.
  */
 
@@ -24,7 +24,7 @@
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
 
-/* 
+/*
  * The Xv6 file system requires locks on various data structures.
  * tinyfs does not require locks
  */
@@ -87,7 +87,7 @@ void writefsinfo() {
 }
 
 /*
- * Blocks. 
+ * Blocks.
  * Allocate a zeroed disk block.
  * See Xv6 balloc for how to use superblock to search for free blocks.
  * Our simple approach uses Block 3 for data block bitmap
@@ -128,9 +128,9 @@ void bfree(uint bi) {
  * the superblock. Each inode has a number, indicating its
  * position on the disk. We have one block for inodes
  *
- * tinyfs caches all inodes in memory. 
+ * tinyfs caches all inodes in memory.
  * The cache is written back to disk on exit.
- * Since we have all inodes in memory, we do not have to free space 
+ * Since we have all inodes in memory, we do not have to free space
  * and evict an inode to replace it with another.
  */
 struct inode* iget(uint inum);
@@ -214,8 +214,8 @@ void iput(struct inode *ip) {
 //
 // The content (data) associated with each inode is stored
 // in blocks on the disk. The first NDIRECT block numbers
-// are listed in ip->blocks[].  
-// We do not implement NINDIRECT. If so, the next NINDIRECT blocks are 
+// are listed in ip->blocks[].
+// We do not implement NINDIRECT. If so, the next NINDIRECT blocks are
 // listed in block ip->blocks[NDIRECT].
 // Return the disk block address of the nth block in inode ip.
 // If there is no such block, bmap allocates one.
@@ -330,7 +330,7 @@ struct inode* dirlookup(struct inode *dp, char *name, uint *poff) {
       inum = de.inum;
       //print_inodes(); // debug code
       //struct inode *inod = iget(inum);   // debug code
-      //printf("inode->inum: %d\n", inod->inum); // debug code   
+      //printf("inode->inum: %d\n", inod->inum); // debug code
       return iget(inum);
     }
   }
@@ -361,7 +361,7 @@ int dirlink(struct inode *dp, char *name, uint inum) { int off;
   de.inum = inum;
   if(writei(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
     panic("dirlink");
-  
+
   return 0;
 }
 
