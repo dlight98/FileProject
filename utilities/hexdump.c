@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
       num_blocks++;
     }
 
-    printf("The last block is block %d\n",num_blocks);
+    printf("The last block is block %d\n",num_blocks-1);
     return 0;
   }
 
