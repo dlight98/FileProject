@@ -134,7 +134,7 @@ int bread(uint block, unsigned char *buf) {
   int sz = read(fs, buf, BSIZE);
   if (sz < 0)
     panic("bread read fail");
-  printf("sz : %d\n", sz);
+  //printf("block : %d | sz : %d\n", block, sz);
   return sz;
 }
 
@@ -149,7 +149,6 @@ int closefs() {
   close(fs);
   return 0;
 }
-
 
 #define LINE 32
 
@@ -169,19 +168,18 @@ int main(int argc, char *argv[]) {
   unsigned char buf[BSIZE];
 
   if(start_block < 0) {  //to use -e
-    printf("DEBUG - main - using -e\n");  //DEBUG
-    //TODO
+    //printf("DEBUG - main - using -e\n");  //DEBUG
     int num_blocks = 1;
     start_block = 0;
-    //for (int i = start_block; i < start_block + blocks; i++) {
     while(1){
       //printf("DEBUG - num_blocks: %d\n",num_blocks);
       if (bread(num_blocks, buf) == 0) {
         break;
-      }
+      } 
       num_blocks++;
     }
-    printf("number of blocks is: (%d)\n",num_blocks);
+
+    printf("The last block is block %d\n",num_blocks);
     return 0;
   }
 
