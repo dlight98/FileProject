@@ -41,11 +41,14 @@ void end_block(){
 }
 
 int get_opts(int count, char *args[]) {
+  printf("DEBUG - get_opts - count == %d\n",count);
   int opt, len, i, good = 1;
   while (good && (opt = getopt(count, args, "s:l:e:")) != -1) {
     int len, i;
+    printf("DEBUG - get_opts - opt is %c\n", opt);
     switch (opt) {
       case 's':
+        printf("DEBUG - case s\n");
         len = strlen(optarg);
         for (i=0;i<len; i++)
           if (!isdigit(optarg[i])) {
@@ -57,6 +60,7 @@ int get_opts(int count, char *args[]) {
           start_block = atoi(optarg);
         break;
       case 'l':
+        printf("DEBUG - case l\n");
         len = strlen(optarg);
         for (i=0;i<len; i++)
           if (!isdigit(optarg[i])) {
@@ -68,14 +72,18 @@ int get_opts(int count, char *args[]) {
             blocks = atoi(optarg);
         break;
       case 'e': //my addition
+        printf("DEBUG - case e\n");
         len = strlen(optarg);
         good = 1; //sets good value to 1
         start_block = -1; //this allows us to compare in main()
+        printf("DEBUG - set start_block to -1\n");
         break;
       case ':':
+        printf("DEBUG - case :\n");
         fprintf(stderr, "option missing value\n");
         break;
       case '?':
+        printf("DEBUG - case ?\n");
         if (optopt == 'e'){
           fprintf(stderr, "DEBUG - case? - using e flag\n"); //DEBUG
           break;}
@@ -91,12 +99,24 @@ int get_opts(int count, char *args[]) {
         break;
     }
   }
-  if(good && optind > count-1 && start_block != -1) {
+  printf("DEBUG - comparing good (%i) and optind\n",good);
+  if(start_block != -1 && good && optind > count-1) {
+    printf("DEBUG - comparison bad\n");
     fprintf(stderr, "Invalid number of arguments. %d\n", optind);
     good = 0;
+    return good;  //FIXME
   }
-  else if (good)
-    strcpy(filename, args[optind]);
+  //printf("DEBUG - in elseif now good (%i)\n", good);
+  else if (good == 1) {
+    printf("DEBUG - comparison good, copying now\n");
+    printf("DEBUG - filename(%s); args(%s)\n", filename, args[optind]);
+    if(start_block != -1){
+      strcpy(filename, args[optind]);
+    }else{
+      strcpy(filename, args[2]);
+    }
+  }
+  printf("DEBUG - good is %c, start is %d \n",good,start_block);
   return good;
 
 }
@@ -133,10 +153,17 @@ int closefs() {
 
 int main(int argc, char *argv[]) {
 
+  printf("DEBUG - main - before getting status\n");
   int status = get_opts(argc, argv);
-  if (!status)
+
+  if (!status){
+    printf("DEBUG - main - status is bad\n");
     exit(-1);
+  }
+  printf("DEBUG - main - status good\n");
+
   openfs(filename);
+  printf("DEBUG - main - afet openfs\n");
   unsigned char buf[BSIZE];
 
   if(start_block < 0) {  //to use -e
