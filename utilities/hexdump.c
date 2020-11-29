@@ -118,7 +118,7 @@ int get_opts(int count, char *args[]) {
       strcpy(filename, args[2]);
     }
   }
-  printf("DEBUG - good is (%d), start is (%d) \n",good,start_block);
+  //printf("DEBUG - good is (%d), start is (%d) \n",good,start_block);
   return good;
 
 }
